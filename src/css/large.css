@@ -1,0 +1,121 @@
+html {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.app-area {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  flex-shrink: 0;
+  justify-content: center;
+  width: 100%;
+  background: #634d76;
+  color: #fff;
+  position: relative;
+  padding: 10px;
+}
+
+.header__h1 {
+  padding: 0;
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.header__menu-toggle {
+  width: 48px;
+  height: 48px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  display: none;
+}
+
+.main {
+  background-color: #00ff00;
+  display: flex;
+  flex-grow: 1;
+}
+
+.map {
+  background-color: blue;
+  flex-grow: 1;
+}
+
+.filter-menu {
+  position: fixed;
+  width: 215px;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  padding: 10px 20px 20px 10px;
+}
+
+.filter-menu__container {
+  background: #634d76;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.35);
+}
+
+.filter-menu__header {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding: 10px 10px 0;
+}
+
+.filer-menu_heading {
+  margin: 0;
+  padding: 0;
+  font-size: 1.125rem;
+  color: #fff;
+}
+
+.filter-menu__menu-close {
+  display: none;
+}
+
+.filter-menu__input {
+  margin: 10px;
+  padding: 5px;
+}
+
+.filter-menu__content {
+  flex-grow: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.filter-menu__item {
+  border-top: 1px solid #fff;
+  margin-bottom: -1px;
+  padding: 5px 3px;
+}
+
+.filter-menu__item button {
+  background: 0;
+  border: 0;
+  color: #fff;
+  padding: 10px 5px;
+  width: 100%;
+  text-align: left;
+}
