@@ -34,7 +34,7 @@ body {
   font-size: 1.125rem;
 }
 
-.header__menu-toggle {
+.header__menu-open {
   width: 48px;
   height: 48px;
   margin: 0;
@@ -46,8 +46,10 @@ body {
   left: 5px;
 }
 
+/* To-do. Check if we need to remove outline when menu-open is active, or whether we'll refocus */
+
 /* Middle line */
-.header__menu-toggle span {
+.header__menu-open span {
   display: inline-block;
   right: 0;
   top: 0;
@@ -58,7 +60,7 @@ body {
 }
 
 /* Top line */
-.header__menu-toggle span::before {
+.header__menu-open span::before {
   -webkit-transform: translateY(-6px); /* Safari 8 */
   transform: translateY(-6px);
   -webkit-transform-origin: 17px 0; /* Safari 8 */
@@ -71,7 +73,7 @@ body {
 }
 
 /* Bottom line */
-.header__menu-toggle span::after {
+.header__menu-open span::after {
   -webkit-transform: translateY(3px); /* Safari 8 */
   transform: translateY(3px);
   -webkit-transform-origin: 9px -1px; /* Safari 8 */
@@ -101,6 +103,11 @@ body {
   top: 0;
   left: 0;
   overflow: hidden;
+  pointer-events: none;
+}
+
+.filter-menu--visible {
+  pointer-events: auto;
 }
 
 .filter-menu::before {
@@ -111,9 +118,14 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0, 0, 0.7, 1);
   will-change: opacity;
+}
+
+.filter-menu--visible.filter-menu::before {
+  opacity: 1;
 }
 
 .filter-menu__container {
@@ -128,6 +140,21 @@ body {
   transform: translateX(-102%);
   will-change: transform;
 }
+
+.filter-menu--visible .filter-menu__container {
+  transform: none;
+}
+
+/* Transition close */
+.fitler-menu--visible.filter-menu--animatable .filter-menu__container {
+  transition: transform 0.13s cubic-bezier(0, 0, 0.3, 1);
+}
+
+/* Transition open */
+.filter-menu--animatable .filter-menu__container {
+  transition: transform 0.33s cubic-bezier(0, 0, 0.3, 1);
+}
+
 
 .filter-menu__header {
   display: flex;

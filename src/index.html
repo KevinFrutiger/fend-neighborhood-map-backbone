@@ -10,11 +10,11 @@
   <link rel="stylesheet" href="css/small.css" media="screen and (max-width: 800px)">
   <link rel="stylesheet" href="css/large.css" media="screen and (min-width: 801px)">
 </head>
-<body>
+<body class="js-app">
   <div class="app-area">
     <header role="banner" class="header">
       <h1 class="header__h1">Some Places</h1>
-      <button class="js-menu header__menu-toggle"><span></span></button>
+      <button class="js-menu-show header__menu-open"><span></span></button>
     </header>
 
     <main role="main" class="main">
@@ -22,25 +22,37 @@
     </main>
   </div>
 
-  <!-- reminder: tabindex should be -1 in small screen, standard tabindex in desktop -->
-  <div class="filter-menu" tabindex="-1">
+  <div class="js-filter-menu filter-menu filter-menu--animatable" role="dialog" aria-labeledby="menu-heading">
     <div class="filter-menu__container">
       <header class="filter-menu__header">
-        <h2 class="filer-menu_heading">Filter</h2>
-        <button class="filter-menu__menu-close"><span></span></button>
+        <h2 id="menu-heading" class="filer-menu_heading">Filter</h2>
+        <button class="js-menu-hide filter-menu__menu-close" disabled><span></span></button>
       </header>
-      <input id="place" name="place" class="filter-menu__input" list="places" placeholder="Enter text to filter">
+      <input id="place" name="place" class="filter-menu__input" disabled list="places" placeholder="Enter text to filter">
       <datalist id="places">
         <option value="Trader Joe's">
         <option value="Starbucks">
       </datalist>
 
       <ul class="filter-menu__content">
-        <li class="filter-menu__item"><button>Trader Joe's</button></li>
-        <li class="filter-menu__item"><button>Starbucks</button></li>
+        <li class="filter-menu__item"><button disabled>Trader Joe's</button></li>
+        <li class="filter-menu__item"><button disabled>Starbucks</button></li>
       </ul>
     </div>
   </div>
+
+
+  <!-- jQuery, Underscore, Backbone -->
+  <script src="js/lib/jquery-2.2.3.min.js"></script>
+  <script src="js/lib/underscore-1.8.3.min.js"></script>
+  <script src="js/lib/backbone-1.3.3.min.js"></script>
+
+  <script src="js/models/place.js"></script>
+  <script src="js/collections/places.js"></script>
+  <script src="js/views/filter-menu-view.js"></script>
+  <script src="js/views/app-view.js"></script>
+  <script src="js/app.js"></script>
+  <!--<script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&amp;callback=app.appView.initMap"></script>-->
 
 </body>
 </html>
