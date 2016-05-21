@@ -3,12 +3,12 @@ var app = app || {};
 (function() {
   'use strict';
 
-  var PlacesCollection = Backbone.Collection.extend({
+  var Places = Backbone.Collection.extend({
 
-    model: app.PlaceModel
+    model: app.Place
 
   });
 
-  app.placesCollection = new PlacesCollection();
+  app.places = new Places();
 
 })();

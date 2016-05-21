@@ -7,7 +7,7 @@ var app = app || {};
     el: '.js-app',
 
     events: {
-      'click .js-menu-show': 'showMenu',
+      'click .js-menu-show': 'showMenu'
     },
 
     initialize: function() {
@@ -18,6 +18,9 @@ var app = app || {};
       this.lastFocusEl = null;
 
       this.listenTo(app.eventBus, 'requestHideMenu', this.hideMenu);
+
+
+      this.getData();
 
     },
 
@@ -42,6 +45,23 @@ var app = app || {};
       this.lastFocusEl.focus();
 
       console.log('hide menu');
+    },
+
+    getData:function() {
+      var data = [
+        {name: 'Trader Joe\s'},
+        {name: 'Starbucks'}
+      ]
+
+      this.buildCollection(data);
+    },
+
+    buildCollection: function(data) {
+      // Sort places by name.
+      app.places.comparator = 'name';
+
+      // Parse all models at once.
+      app.places.add(data);
     }
 
   });

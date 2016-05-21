@@ -28,18 +28,17 @@
         <h2 id="menu-heading" class="filer-menu_heading">Filter</h2>
         <button class="js-menu-hide filter-menu__menu-close" disabled><span></span></button>
       </header>
-      <input id="place" name="place" class="filter-menu__input" disabled list="places" placeholder="Enter text to filter">
-      <datalist id="places">
-        <option value="Trader Joe's">
-        <option value="Starbucks">
-      </datalist>
+      <input id="place" name="place" class="filter-menu__input" list="places" placeholder="Enter text to filter" disabled>
+      <datalist id="places" class="js-datalist"></datalist>
 
-      <ul class="filter-menu__content">
-        <li class="filter-menu__item"><button disabled>Trader Joe's</button></li>
-        <li class="filter-menu__item"><button disabled>Starbucks</button></li>
-      </ul>
+      <ul class="js-list filter-menu__content"></ul>
     </div>
   </div>
+
+  <!-- Templates -->
+  <script type="text/templates" class="js-filter-item">
+    <button disabled><%= name %></button>
+  </script>
 
 
   <!-- jQuery, Underscore, Backbone -->
@@ -49,6 +48,8 @@
 
   <script src="js/models/place.js"></script>
   <script src="js/collections/places.js"></script>
+  <script src="js/views/filter-datalist-option-view.js"></script>
+  <script src="js/views/filter-item-view.js"></script>
   <script src="js/views/filter-menu-view.js"></script>
   <script src="js/views/app-view.js"></script>
   <script src="js/app.js"></script>
