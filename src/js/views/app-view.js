@@ -17,7 +17,7 @@ var app = app || {};
       this.$appArea = $('.app-area');
       this.lastFocusEl = null;
 
-      this.listenTo(app.eventBus, 'requestHideMenu', this.hideMenu);
+      this.listenTo(app.eventBus, 'menuHide', this.menuHideHandler);
 
 
       this.getData();
@@ -40,7 +40,7 @@ var app = app || {};
       console.log('show menu');
     },
 
-    hideMenu: function() {
+    menuHideHandler: function() {
       this.$appArea.attr('aria-hidden', false);
       this.lastFocusEl.focus();
 
@@ -49,8 +49,14 @@ var app = app || {};
 
     getData:function() {
       var data = [
-        {name: 'Trader Joe\s'},
-        {name: 'Starbucks'}
+        {name: 'Trader Joe\'s'},
+        {name: 'Starbucks'},
+        {name: 'South San Francisco BART Station'},
+        {name: 'See\'s Candies'},
+        {name: 'Best Buy'},
+        {name: 'Paris Baguette'},
+        {name: 'Lidia\'s Deli'},
+        {name: 'San Bruno Mountain State Park'}
       ]
 
       this.buildCollection(data);

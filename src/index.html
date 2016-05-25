@@ -5,7 +5,7 @@
   <title>Neighborhood Map Project</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ff00ff"> <!-- see what this does -->
+  <meta name="theme-color" content="#634d76">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/small.css" media="screen and (max-width: 800px)">
   <link rel="stylesheet" href="css/large.css" media="screen and (min-width: 801px)">
@@ -28,9 +28,7 @@
         <h2 id="menu-heading" class="filer-menu_heading">Filter</h2>
         <button class="js-menu-hide filter-menu__menu-close" disabled><span></span></button>
       </header>
-      <input id="place" name="place" class="filter-menu__input" list="places" placeholder="Enter text to filter" disabled>
-      <datalist id="places" class="js-datalist"></datalist>
-
+      <input id="place" name="place" class="js-filter-input filter-menu__input" placeholder="Enter text to filter" disabled>
       <ul class="js-list filter-menu__content"></ul>
     </div>
   </div>
