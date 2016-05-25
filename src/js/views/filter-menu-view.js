@@ -43,10 +43,8 @@ var app = app || {};
       this.$list.empty();
       this.$list.append(listDocFrag);
 
-      // Enable the inputs, if the menu is open.
-      if (this.menuIsOpen) {
-        this.$(':input').prop('disabled', false);
-      }
+      // Enable the inputs if the menu is open.
+      this.$(':input').prop('disabled', !this.menuIsOpen);
     },
 
     showMenu: function() {
