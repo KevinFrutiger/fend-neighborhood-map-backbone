@@ -11,13 +11,23 @@ var app = app || {};
     },
 
     initialize: function() {
-      console.log('initialized filter menu', this.el);
-
-      this.menuIsOpen = false;
+      this.userOpenedMenu = false;
 
       this.$closeButton = this.$('.js-menu-hide');
       this.$datalist = this.$('.js-datalist');
       this.$list = this.$('.js-list');
+
+      var self = this;
+
+      $(window).resize(function() {
+          // Re-sync proper TAB navigation. Filter may be showing
+          // if media query selected different CSS.
+          self.$(':input').prop(
+              'disabled',
+              !(app.widerThanBreakpoint() || self.userOpenedMenu)
+            );
+
+        });
 
       // Update the UI when the collection is done updating
       // since we're sorting the collection.
@@ -39,18 +49,19 @@ var app = app || {};
           listDocFrag.appendChild(listView.render().el);
         });
 
-      // Clear out the UL list and add the filtered items.
       this.$list.empty();
       this.$list.append(listDocFrag);
 
-      // Enable the inputs if the menu is open.
-      this.$(':input').prop('disabled', !this.menuIsOpen);
+      this.$(':input').prop(
+          'disabled',
+          !(app.widerThanBreakpoint() || self.userOpenedMenu)
+        );
     },
 
     showMenu: function() {
       // Show the menu.
       this.$el.toggleClass('filter-menu--visible');
-      this.menuIsOpen = true;
+      this.userOpenedMenu = true;
 
       // Enable all inputs in the menu. They will now be tabbable.
       this.$(':input').prop('disabled', false);
@@ -61,7 +72,7 @@ var app = app || {};
     hideMenu: function() {
       // Hide the menu.
       this.$el.toggleClass('filter-menu--visible');
-      this.menuIsOpen = false;
+      this.userOpenedMenu = false;
 
       // Disable all inputs in the menu. They will no longer be tabbable.
       this.$(':input').prop('disabled', true);
