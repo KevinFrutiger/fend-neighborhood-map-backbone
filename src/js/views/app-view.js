@@ -14,7 +14,7 @@ var app = app || {};
       console.log('appView initialized');
 
       this.filterMenuView = new app.FilterMenuView();
-      this.mapView = new app.MapView();
+      this.mapView = null;
       this.$appArea = $('.app-area');
       this.lastFocusEl = null;
 
@@ -27,6 +27,10 @@ var app = app || {};
 
     render: function() {
       console.log('render appView');
+    },
+
+    initMap: function() {
+      this.mapView = new app.MapView();
     },
 
     showMenu: function() {

@@ -17,6 +17,35 @@ var app = app || {};
         SELECTED: 'images/marker-yellow.png'
       }
 
+      // Note: After markers added, map bounds are reset which changes the zoom.
+      // Since zoom is required here, setting to a wider view to give sense of
+      // overall location before map redraws. And it makes it look intentional
+      // versus a glitch if the zoom is close to the final zoom.
+      //
+      var mapOptions = {
+        center: {lat: 37.6640317, lng: -122.445706},
+        zoom: 11,
+        zoomControl: true,
+        zoomControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_CENTER
+        },
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          position: google.maps.ControlPosition.RIGHT_TOP
+        },
+        streetViewControl: false
+      };
+
+      // Add the map to the page.
+      this.map = new google.maps.Map($('#map')[0], mapOptions);
+
+      this.placesService = new google.maps.places.PlacesService(this.map);
+
+      this.mapBounds = new google.maps.LatLngBounds();
+
+      // Create the markers.
+      this.render();
+
     },
 
     render: function() {
@@ -50,36 +79,6 @@ var app = app || {};
 
           }
         });
-    },
-
-    googleMapsReady: function() {
-
-      // Note: After markers added, map bounds are reset which changes the zoom.
-      // Since zoom is required here, setting to a wider view to give sense of
-      // overall location before map redraws. And it makes it look intentional
-      // versus a glitch if the zoom is close to the final zoom.
-      //
-      var mapOptions = {
-        center: {lat: 37.6640317, lng: -122.445706},
-        zoom: 11,
-        zoomControl: true,
-        zoomControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_CENTER
-        },
-        mapTypeControl: true,
-        mapTypeControlOptions: {
-          position: google.maps.ControlPosition.RIGHT_TOP
-        },
-        streetViewControl: false
-      };
-
-      this.map = new google.maps.Map($('#map')[0], mapOptions);
-
-      this.placesService = new google.maps.places.PlacesService(this.map);
-
-      this.mapBounds = new google.maps.LatLngBounds();
-
-      this.render();
     },
 
     addMarker: function(place) {
