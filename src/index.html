@@ -18,7 +18,7 @@
     </header>
 
     <main role="main" class="main">
-      <div id="map" class="map"></div>
+      <div id="map" class="js-map map"></div>
     </main>
   </div>
 
@@ -49,9 +49,10 @@
   <script src="js/views/filter-datalist-option-view.js"></script>
   <script src="js/views/filter-item-view.js"></script>
   <script src="js/views/filter-menu-view.js"></script>
+  <script src="js/views/map-view.js"></script>
   <script src="js/views/app-view.js"></script>
   <script src="js/app.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&amp;callback=app.appView.initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places&amp;callback=app.appView.mapView.googleMapsReady"></script>
 
 </body>
 </html>
