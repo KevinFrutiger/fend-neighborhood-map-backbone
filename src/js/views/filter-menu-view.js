@@ -46,7 +46,9 @@ var app = app || {};
       // Append filtered places to the document fragment.
       filteredModels.forEach(function(place) {
           var listView = new app.FilterItemView({model: place});
-          listDocFrag.appendChild(listView.render().el);
+          var listViewEl = listView.render().$el[0];
+
+          listDocFrag.appendChild(listViewEl);
         });
 
       this.$list.empty();
@@ -54,7 +56,7 @@ var app = app || {};
 
       this.$(':input').prop(
           'disabled',
-          !(app.widerThanBreakpoint() || self.userOpenedMenu)
+          !(app.widerThanBreakpoint() || this.userOpenedMenu)
         );
     },
 
