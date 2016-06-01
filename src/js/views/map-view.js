@@ -37,7 +37,7 @@ var app = app || {};
       };
 
       // Add the map to the page.
-      this.map = new google.maps.Map($('#map')[0], mapOptions);
+      this.map = new google.maps.Map($('.js-map')[0], mapOptions);
 
       this.placesService = new google.maps.places.PlacesService(this.map);
 
