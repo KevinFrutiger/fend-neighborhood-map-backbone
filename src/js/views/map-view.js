@@ -15,7 +15,7 @@ var app = app || {};
       this.markerIcons = {
         NORMAL: 'images/marker-red.png',
         SELECTED: 'images/marker-yellow.png'
-      }
+      };
 
       // Note: After markers added, map bounds are reset which changes the zoom.
       // Since zoom is required here, setting to a wider view to give sense of
@@ -43,51 +43,63 @@ var app = app || {};
 
       this.mapBounds = new google.maps.LatLngBounds();
 
+      // Listen for changes on model so we can check filtered.
+      this.listenTo(app.places, 'change:filtered', this.render);
+
       // Create the markers.
       this.render();
 
     },
 
     render: function() {
+      console.log('map view render');
+
       var self = this;
 
-      var filteredModels = app.places.models.filter(function(place) {
-        return place.attributes.filtered;
-      });
-
-      filteredModels.forEach(function(place) {
-          if (!place.placeId) {
+      app.places.models.forEach(function(place) {
+          if (!place.get('placeId')) {
             // Set up the request object for the Places Service.
             var request = {
               location: self.map.getCenter(),
               radius: '500',
-              query: place.attributes.name
+              query: place.get('name')
             };
 
             // Query the Places API.
             self.placesService.textSearch(request, function(results, status) {
               if (status == google.maps.places.PlacesServiceStatus.OK) {
                 // Store data in our Places model so we don't have to requery.
-                place.placeId = results[0].place_id;
-                place.position = results[0].geometry.location;
-                place.types = results[0].types;
+                place.set('placeId', results[0].place_id);
+                place.set('location', results[0].geometry.location);
+                place.set('types', results[0].types);
 
                 // Add a marker to the map.
                 self.addMarker(place);
               }
             });
 
+          } else { // We have a marker for this place already.
+            var marker = place.get('marker');
+
+            // Show/hide based on whether place is in the filtered list.
+            marker.setVisible(place.get('filtered'));
+
+            // Stop any bouncing markers.
+            if (marker.getAnimation() !== null) {
+              marker.setAnimation(null);
+            }
           }
         });
     },
 
     addMarker: function(place) {
-      // Add the marker to the map.
+
+      // Add the marker to the map. Instantiation automatically shows it.
       var marker = new google.maps.Marker({
         map: this.map,
         place: {
-          placeId: place.placeId,
-          location: place.position
+          placeId: place.get('placeId'),
+          location: place.get('location')
         },
         animation: google.maps.Animation.DROP,
         icon: this.markerIcons.NORMAL
@@ -101,11 +113,11 @@ var app = app || {};
       });
 
       // Add the marker's LatLng to the extents of the map and re-center.
-      this.mapBounds.extend(place.position);
+      this.mapBounds.extend(place.get('location'));
       this.map.fitBounds(this.mapBounds);
       this.map.setCenter(this.mapBounds.getCenter());
 
-      place.marker = marker;
+      place.set('marker', marker);
     },
 
     selectPlace: function(place) {

@@ -38,7 +38,7 @@ var app = app || {};
       console.log('rendered filter menu');
 
       var filteredModels = app.places.models.filter(function(place) {
-        return place.attributes.filtered;
+        return place.get('filtered');
       });
 
       var listDocFrag = document.createDocumentFragment();
@@ -90,7 +90,7 @@ var app = app || {};
       var re = new RegExp(inputValue, 'ig');
 
       app.places.models.forEach(function(model) {
-        model.attributes.filtered = re.test(model.attributes.name);
+        model.set('filtered', re.test(model.get('name')));
       });
 
       this.render();
