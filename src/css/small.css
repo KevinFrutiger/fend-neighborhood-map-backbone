@@ -239,6 +239,10 @@ body {
   padding: 5px 3px;
 }
 
+.filter-menu_item--selected {
+  background-color: rgba(0,0,0,0.5);
+}
+
 .filter-menu__item button {
   background: 0;
   border: 0;

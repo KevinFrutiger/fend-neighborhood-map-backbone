@@ -7,7 +7,8 @@ var app = app || {};
 
     defaults: {
       name: '',
-      filtered: true
+      filtered: true,
+      selected: false
     }
 
   });

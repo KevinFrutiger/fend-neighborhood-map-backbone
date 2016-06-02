@@ -32,6 +32,8 @@ var app = app || {};
       // Update the UI when the collection is done updating
       // since we're sorting the collection.
       this.listenTo(app.places, 'update', this.render);
+
+      this.listenTo(app.eventBus, 'placeSelected', this.selectPlace);
     },
 
     render: function() {
@@ -96,6 +98,16 @@ var app = app || {};
       this.render();
 
       console.log('inputing text', event.target.value);
+    },
+
+    selectPlace: function(event) {
+      console.log('selectPlace', event);
+
+      app.places.models.forEach(function(place) {
+        place.set('selected', place === event.model);
+      })
+
+      this.hideMenu();
     }
 
   });

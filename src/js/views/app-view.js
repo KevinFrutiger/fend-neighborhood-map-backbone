@@ -30,7 +30,7 @@ var app = app || {};
     },
 
     initMap: function() {
-      this.mapView = new app.MapView();
+      //this.mapView = new app.MapView();
     },
 
     showMenu: function() {
