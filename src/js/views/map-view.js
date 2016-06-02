@@ -45,6 +45,8 @@ var app = app || {};
 
       // Listen for changes on model so we can check filtered.
       this.listenTo(app.places, 'change:filtered', this.render);
+      $(window).resize({view: this},
+                       this.windowResizeHandler);
 
       // Create the markers.
       this.render();
@@ -122,6 +124,15 @@ var app = app || {};
 
     selectPlace: function(place) {
       console.log('select place');
+    },
+
+    windowResizeHandler: function(event) {
+      var map = event.data.view.map;
+      var bounds = event.data.view.mapBounds;
+
+      google.maps.event.trigger(map, 'resize');
+      map.fitBounds(bounds);
+      map.setCenter(bounds.getCenter());
     }
 
   });
