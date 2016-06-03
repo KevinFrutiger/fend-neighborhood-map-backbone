@@ -33,7 +33,7 @@ var app = app || {};
       // since we're sorting the collection.
       this.listenTo(app.places, 'update', this.render);
 
-      this.listenTo(app.eventBus, 'placeSelected', this.selectPlace);
+      this.listenTo(app.eventBus, 'placeSelected', this.placeSelectedHandler);
     },
 
     render: function() {
@@ -100,14 +100,21 @@ var app = app || {};
       console.log('inputing text', event.target.value);
     },
 
-    selectPlace: function(event) {
-      console.log('selectPlace', event);
+    placeSelectedHandler: function(place) {
+      console.log('selectPlace', place);
 
-      app.places.models.forEach(function(place) {
-        place.set('selected', place === event.model);
+      // Loop through all models except the selected one (we don't want to
+      // fire its change event again) and reset the flag.
+      app.places.models.forEach(function(currentPlace) {
+        if (currentPlace != place) {
+          currentPlace.set('selected', false);
+        }
       })
 
-      this.hideMenu();
+      if (this.userOpenedMenu && place.get('selected')) {
+        this.hideMenu();
+        // Need to focus to selected item on map, for A11y ?
+      }
     }
 
   });

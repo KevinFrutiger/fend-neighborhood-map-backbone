@@ -111,7 +111,10 @@ var app = app || {};
 
       // Listen for clicks on the marker.
       marker.addListener('click', function() {
-        self.selectPlace(place);
+        place.set('selected', true);
+
+        //self.selectPlace(place);
+        app.eventBus.trigger('placeSelected', place);
       });
 
       // Add the marker's LatLng to the extents of the map and re-center.
@@ -124,6 +127,8 @@ var app = app || {};
 
     selectPlace: function(place) {
       console.log('select place');
+
+
     },
 
     windowResizeHandler: function(event) {

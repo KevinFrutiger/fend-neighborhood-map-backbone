@@ -21,18 +21,17 @@ var app = app || {};
     render: function() {
       this.$el.html(this.template(this.model.attributes));
 
-      if (this.model.get('selected')) {
-        this.$el.addClass('filter-menu__item--selected');
-      } else {
-        this.$el.removeClass('filter-menu__item--selected');
-      }
+      this.toggleSelectState();
 
       return this;
     },
 
     buttonClickHandler: function() {
-      // Notify the rest of the app (including this view) that item was selected.
-      app.eventBus.trigger('placeSelected', this);
+      // Set the flag.
+      this.model.set('selected', !this.model.get('selected'));
+
+      // Notify the rest of the app that item was selected.
+      app.eventBus.trigger('placeSelected', this.model);
     },
 
     toggleSelectState: function() {
