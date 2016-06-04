@@ -33,7 +33,7 @@ var app = app || {};
       // since we're sorting the collection.
       this.listenTo(app.places, 'update', this.render);
 
-      this.listenTo(app.eventBus, 'placeSelected', this.placeSelectedHandler);
+      this.listenTo(app.eventBus, 'selectionChange', this.selectionChangeHandler);
     },
 
     render: function() {
@@ -100,7 +100,7 @@ var app = app || {};
       console.log('inputing text', event.target.value);
     },
 
-    placeSelectedHandler: function(place) {
+    selectionChangeHandler: function(place) {
       console.log('selectPlace', place);
 
       // Loop through all models except the selected one (we don't want to

@@ -252,3 +252,19 @@ body {
   text-align: left;
 }
 
+
+.info-window-content {
+  overflow: auto;
+  max-width: 300px;
+  width: 50vw;
+}
+
+.info-window-content__heading {
+  font-weight: bold;
+}
+
+.info-window-content__status {
+  color: #ccc;
+  margin: 0;
+  padding: 10px 0;
+}

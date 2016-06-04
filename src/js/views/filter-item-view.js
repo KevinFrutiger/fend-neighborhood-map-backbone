@@ -30,8 +30,8 @@ var app = app || {};
       // Set the flag.
       this.model.set('selected', !this.model.get('selected'));
 
-      // Notify the rest of the app that item was selected.
-      app.eventBus.trigger('placeSelected', this.model);
+      // Notify the rest of the app that item was selected/deslected.
+      app.eventBus.trigger('selectionChange', this.model);
     },
 
     toggleSelectState: function() {

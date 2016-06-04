@@ -6,21 +6,24 @@ var app = app || {};
 
     el: '.js-map',
 
+    markerIcons: {
+      NORMAL: 'images/marker-red.png',
+      SELECTED: 'images/marker-yellow.png'
+    },
+
+    markerAnimationTimeoutDuration: 3000,
+
     initialize: function() {
 
-      this.map = null;
-      this.placesService = null;
-      this.mapBounds = null;
+      this.infoWindow = null;
+      this.markerAnimationTimeout = null;
+      this.$jqXHR = null;
 
-      this.markerIcons = {
-        NORMAL: 'images/marker-red.png',
-        SELECTED: 'images/marker-yellow.png'
-      };
-
-      // Note: After markers added, map bounds are reset which changes the zoom.
-      // Since zoom is required here, setting to a wider view to give sense of
-      // overall location before map redraws. And it makes it look intentional
-      // versus a glitch if the zoom is close to the final zoom.
+      // After markers are added, map bounds are reset which changes
+      // the zoom. Since we are required to designate a zoom here,
+      // we're setting to a wider zoom before map redraws to give sense
+      // of overall location and so the change in zoom doesn't look
+      // like a glitch.
       //
       var mapOptions = {
         center: {lat: 37.6640317, lng: -122.445706},
@@ -38,13 +41,15 @@ var app = app || {};
 
       // Add the map to the page.
       this.map = new google.maps.Map($('.js-map')[0], mapOptions);
+      this.mapBounds = new google.maps.LatLngBounds();
 
       this.placesService = new google.maps.places.PlacesService(this.map);
 
-      this.mapBounds = new google.maps.LatLngBounds();
-
-      // Listen for changes on model so we can check filtered.
+      // Backbone events
       this.listenTo(app.places, 'change:filtered', this.render);
+      this.listenTo(app.eventBus, 'selectionChange', this.selectionChangeHandler);
+
+      // Other DOM events
       $(window).resize({view: this},
                        this.windowResizeHandler);
 
@@ -94,6 +99,47 @@ var app = app || {};
         });
     },
 
+    selectionChangeHandler: function(place) {
+      if (place.get('selected')) {
+        // Re-center the map to the corresponding place.
+        this.map.panTo(place.get('location'));
+
+        // Highlight the selected place on the map.
+        this.toggleMarkerAnimation(place.get('marker'));
+        this.toggleMarkerSelectedState(place.get('marker'));
+
+        // Open the info window.
+        this.addInfoWindow(place);
+
+        // TODO: Move focus to the infow window close button for A11y.
+
+      } else {
+        // Remove highlights
+        this.toggleMarkerAnimation(null);
+        this.toggleMarkerSelectedState(null);
+
+        // Close the info window
+        if (this.infoWindow) {
+          this.removeInfoWindow();
+        }
+
+        // Refit the map to include all the markers.
+        this.refitAndCenter();
+      }
+    },
+
+    windowResizeHandler: function(event) {
+      google.maps.event.trigger(event.data.view.map, 'resize');
+
+      // Refit the map to include all the markers.
+      event.data.view.refitAndCenter();
+    },
+
+    refitAndCenter: function() {
+      this.map.fitBounds(this.mapBounds);
+      this.map.setCenter(this.mapBounds.getCenter());
+    },
+
     addMarker: function(place) {
 
       // Add the marker to the map. Instantiation automatically shows it.
@@ -107,37 +153,230 @@ var app = app || {};
         icon: this.markerIcons.NORMAL
       });
 
-      var self = this;
-
       // Listen for clicks on the marker.
       marker.addListener('click', function() {
         place.set('selected', true);
 
-        //self.selectPlace(place);
-        app.eventBus.trigger('placeSelected', place);
+        // Notify the app (incl. this view) that a place was selected.
+        app.eventBus.trigger('selectionChange', place);
       });
 
       // Add the marker's LatLng to the extents of the map and re-center.
       this.mapBounds.extend(place.get('location'));
-      this.map.fitBounds(this.mapBounds);
-      this.map.setCenter(this.mapBounds.getCenter());
+      this.refitAndCenter();
+      // TODO: Track adding all the markers so we can fit and center once.
 
       place.set('marker', marker);
     },
 
-    selectPlace: function(place) {
-      console.log('select place');
+    toggleMarkerAnimation: function(markerToAnimate) {
 
+      // Animate the selected marker.
+      if (markerToAnimate && !markerToAnimate.getAnimation()) {
+        markerToAnimate.setAnimation(google.maps.Animation.BOUNCE);
+
+        var self = this;
+
+        this.markerAnimationTimeout = setTimeout(
+            self.createAnimationTimeoutHandler(markerToAnimate),
+            self.markerAnimationTimeoutDuration
+          );
+      }
+
+      // Stop animating any other markers that might be animating.
+      app.places.models.forEach(function(place) {
+          var currentMarker = place.get('marker');
+
+          if (currentMarker != markerToAnimate) {
+            currentMarker.setAnimation(null);
+          }
+
+        });
 
     },
 
-    windowResizeHandler: function(event) {
-      var map = event.data.view.map;
-      var bounds = event.data.view.mapBounds;
+    toggleMarkerSelectedState: function(markerToToggle) {
+      // Toggle the selected marker to selected state.
+      if (markerToToggle) {
+        markerToToggle.setIcon(this.markerIcons.SELECTED);
+      }
 
-      google.maps.event.trigger(map, 'resize');
-      map.fitBounds(bounds);
-      map.setCenter(bounds.getCenter());
+      var self = this;
+
+      // Toggle all the other markers off.
+      app.places.models.forEach(function(place) {
+          var marker = place.get('marker');
+
+          if (marker != markerToToggle) {
+            marker.setIcon(self.markerIcons.NORMAL);
+          }
+        });
+    },
+
+    addInfoWindow: function(place) {
+      // If the info window is already opened, remove it.
+      if (this.infoWindow) {
+        this.removeInfoWindow();
+      }
+
+      // Build nodes for info window content.
+      //
+      // To keep the width of the info window from fluctuating, we have
+      // to wrap the content and set the width in the stylesheet.
+      //
+      var contentElement = document.createElement('div');
+      contentElement.className = 'info-window-content';
+
+      var infoHeaderElement = document.createElement('div');
+      infoHeaderElement.className = 'info-window-content__heading';
+      infoHeaderElement.appendChild(
+          document.createTextNode(place.get('name'))
+        );
+
+      var statusElement = document.createElement('div');
+      statusElement.className = 'info-window-content__status';
+      statusElement.appendChild(
+          document.createTextNode('Getting more information...')
+        );
+
+      contentElement.appendChild(infoHeaderElement);
+      contentElement.appendChild(statusElement);
+
+
+      // Create a new info window.
+
+      var infoWindowOptions = { content: contentElement };
+      var marker = place.get('marker');
+      var self = this;
+
+      this.infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+
+      this.infoWindow.addListener('closeclick', function() {
+          // Stop the marker animation.
+          marker.setAnimation(null);
+
+          self.infoWindow = null;
+        });
+
+      this.infoWindow.addListener('domready', function() {
+          // Event fires every time content is updated, so remove the listener.
+          google.maps.event.clearListeners(self.infoWindow, 'domready');
+
+          self.populateInfoWindow(place);
+        });
+
+      // Show the info window.
+      this.infoWindow.open(this.map, marker);
+
+    },
+
+    removeInfoWindow: function() {
+      // Clean up and close the window.
+      google.maps.event.clearListeners(this.infoWindow, 'closeclick');
+      this.infoWindow.close();
+    },
+
+    populateInfoWindow: function(place) {
+
+      // If we already have Wikipedia data...
+      if (place.get('wikipediaData')) {
+        // ...add data to the info window.
+        this.appendInfo(place.get('wikipediaData'));
+      } else {
+        // If we already have a jqXHR in progress, abort it.
+        if (this.$jqXHR) {
+          this.$jqXHR.abort();
+        }
+
+        // Set up the query.
+        var wikiUrl = 'https://en.wikipedia.org/w/api.php';
+        var settings = {
+          dataType: 'jsonp',
+          timeout: 8000,
+          data: { // Wikipedia query fields
+            action: 'opensearch',
+            search: place.get('name'),
+            format: 'json',
+            formatversion: 2
+          }
+        };
+
+        var self = this;
+
+        // Get the data.
+        this.$jqXHR = $.ajax(wikiUrl, settings)
+                .done(function(data, status, jqXHR) {
+                  // Build the HTML to add to the info window.
+                  var htmlString = '';
+
+                  // If there's a snippet...
+                  if (data[2][0]) {
+                    // Build the string with the data from the snippet.
+                    var snippet = data[2][0];
+                    var url = data[3][0];
+
+                    var citation = '<a href="' + url + '" target="_blank">' +
+                                   'Wikipedia</a>';
+
+                    htmlString = '<blockquote>' + snippet + '</blockquote>' +
+                        '<cite class="info-window-citation">Source: ' +
+                        citation + '</cite>';
+                  } else {
+                    htmlString = '<blockquote>No additional information ' +
+                                 'available.<blockquote>';
+                  }
+
+                  // Add the content to the info window.
+                  self.appendInfo(htmlString);
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                  var htmlString = '';
+
+                  if (textStatus == 'timeout') {
+                    htmlString = '<p>The request for additional information '+
+                                 'took too long.</p>';
+                  } else {
+                    htmlString = '<p>An error was encountered when trying to ' +
+                                 'get addtional information <span>[' +
+                                 jqXHR.statusText + ' ' + jqXHR.status +
+                                 ']</span>.</p>';
+                  }
+
+                  // Add the warning to the info window.
+                  self.appendInfo(htmlString);
+
+                  self.$jqXHR = null;
+                });
+
+
+      }
+    },
+
+    appendInfo: function(htmlString) {
+      // Get the DOM nodes that were used to set the content.
+      //
+      // The info window UI is too slow to resize if we modify the node
+      // directly (text overflows). Thus, we're cloning the node so we can make
+      // changes and use use setContent() to update the info window.
+      //
+      var infoElement = this.infoWindow.getContent().cloneNode(true);
+
+      // Replace the status text and add the new data.
+      var infoStr = infoElement.innerHTML;
+      infoStr = infoStr.replace('<div class="info-window-content__status">' +
+                                'Getting more information...</div>', '');
+      infoStr += htmlString;
+      infoElement.innerHTML = infoStr;
+
+      // Update the info window with the updated node.
+      this.infoWindow.setContent(infoElement);
+
+    },
+
+    createAnimationTimeoutHandler: function(currentMarker) {
+      return function() {
+        currentMarker.setAnimation(null);
+      };
     }
 
   });
