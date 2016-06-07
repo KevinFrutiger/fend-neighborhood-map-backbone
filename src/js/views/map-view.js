@@ -99,10 +99,12 @@ var app = app || {};
         });
     },
 
-    selectionChangeHandler: function(place) {
+    selectionChangeHandler: function(place, shouldPan) {
       if (place.get('selected')) {
         // Re-center the map to the corresponding place.
-        this.map.panTo(place.get('location'));
+        if (shouldPan) {
+          this.map.panTo(place.get('location'));
+        }
 
         // Highlight the selected place on the map.
         this.toggleMarkerAnimation(place.get('marker'));
@@ -158,7 +160,7 @@ var app = app || {};
         place.set('selected', true);
 
         // Notify the app (incl. this view) that a place was selected.
-        app.eventBus.trigger('selectionChange', place);
+        app.eventBus.trigger('selectionChange', place, false);
       });
 
       // Add the marker's LatLng to the extents of the map and re-center.

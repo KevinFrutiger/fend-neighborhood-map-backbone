@@ -31,7 +31,8 @@ var app = app || {};
       this.model.set('selected', !this.model.get('selected'));
 
       // Notify the rest of the app that item was selected/deslected.
-      app.eventBus.trigger('selectionChange', this.model);
+      // Re-center the map.
+      app.eventBus.trigger('selectionChange', this.model, true);
     },
 
     toggleSelectState: function() {
