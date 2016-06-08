@@ -97,6 +97,11 @@ var app = app || {};
             }
           }
         });
+
+      // Remove the info window, if open
+      if (this.infoWindow) {
+        this.removeInfoWindow();
+      }
     },
 
     selectionChangeHandler: function(place, shouldPan) {

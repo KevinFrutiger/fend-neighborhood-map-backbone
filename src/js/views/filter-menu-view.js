@@ -43,6 +43,16 @@ var app = app || {};
         return place.get('filtered');
       });
 
+      // Deselect any place that may be selected but is no longer in the
+      // filtered results.
+      app.places.models.forEach(function(place) {
+        if (place.get('selected') && filteredModels.indexOf(place) === -1) {
+          place.set('selected', false);
+          // Notify the rest of the app that item was selected/deslected.
+          app.eventBus.trigger('selectionChange', place, false);
+        }
+      });
+
       var listDocFrag = document.createDocumentFragment();
 
       // Append filtered places to the document fragment.
