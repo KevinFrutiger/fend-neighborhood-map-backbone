@@ -96,13 +96,9 @@ var app = app || {};
       });
 
       this.render();
-
-      console.log('inputing text', event.target.value);
     },
 
     selectionChangeHandler: function(place) {
-      console.log('selectPlace', place);
-
       // Loop through all models except the selected one (we don't want to
       // fire its change event again) and reset the flag.
       app.places.models.forEach(function(currentPlace) {
