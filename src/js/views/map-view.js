@@ -320,12 +320,16 @@ var app = app || {};
                     var citation = '<a href="' + url + '" target="_blank">' +
                                    'Wikipedia</a>';
 
-                    htmlString = '<blockquote>' + snippet + '</blockquote>' +
+                    htmlString = '<blockquote ' +
+                        'class="info-window-content__snippet">' + snippet +
+                        '</blockquote>' +
                         '<cite class="info-window-citation">Source: ' +
                         citation + '</cite>';
                   } else {
-                    htmlString = '<blockquote>No additional information ' +
-                                 'available.<blockquote>';
+                    htmlString = '<blockquote ' +
+                                 'class="info-window-content__snippet">' +
+                                 'No additional information available.' +
+                                 '<blockquote>';
                   }
 
                   // Add the content to the info window.
