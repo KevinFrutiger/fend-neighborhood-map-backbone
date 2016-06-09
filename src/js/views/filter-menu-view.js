@@ -119,7 +119,6 @@ var app = app || {};
 
       if (this.userOpenedMenu && place.get('selected')) {
         this.hideMenu();
-        // Need to focus to selected item on map, for A11y ?
       }
     }
 
