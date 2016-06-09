@@ -118,8 +118,6 @@ var app = app || {};
         // Open the info window.
         this.addInfoWindow(place);
 
-        // TODO: Move focus to the infow window close button for A11y.
-
       } else {
         // Remove highlights
         this.toggleMarkerAnimation(null);
@@ -231,11 +229,12 @@ var app = app || {};
       // To keep the width of the info window from fluctuating, we have
       // to wrap the content and set the width in the stylesheet.
       //
-      var contentElement = document.createElement('div');
+      var contentElement = document.createElement('article');
       contentElement.className = 'info-window-content';
 
-      var infoHeaderElement = document.createElement('div');
+      var infoHeaderElement = document.createElement('h3');
       infoHeaderElement.className = 'info-window-content__heading';
+      infoHeaderElement.setAttribute('tabindex', '0');
       infoHeaderElement.appendChild(
           document.createTextNode(place.get('name'))
         );
@@ -381,6 +380,10 @@ var app = app || {};
 
       // Update the info window with the updated node.
       this.infoWindow.setContent(infoElement);
+
+      // For A11y, move the focus.
+      app.appView.requestFocus(
+          infoElement.querySelector('.info-window-content__heading'));
 
     },
 

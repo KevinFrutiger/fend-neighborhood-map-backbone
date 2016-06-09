@@ -127,6 +127,7 @@ body {
 .info-window-content {
   overflow: auto;
   max-width: 300px;
+  padding: 10px;
   width: 50vw;
 }
 

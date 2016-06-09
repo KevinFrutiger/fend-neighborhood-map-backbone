@@ -6,7 +6,7 @@ var app = app || {};
     el: '.js-filter-menu',
 
     events: {
-      'click .js-menu-hide': 'hideMenu',
+      'click .js-menu-hide': 'closeButtonClickHandler',
       'input .js-filter-input': 'filterPlaces'
     },
 
@@ -33,7 +33,9 @@ var app = app || {};
       // since we're sorting the collection.
       this.listenTo(app.places, 'update', this.render);
 
-      this.listenTo(app.eventBus, 'selectionChange', this.selectionChangeHandler);
+      this.listenTo(app.eventBus,
+                    'selectionChange',
+                    this.selectionChangeHandler);
     },
 
     render: function() {
@@ -49,7 +51,8 @@ var app = app || {};
         if (place.get('selected') && filteredModels.indexOf(place) === -1) {
           place.set('selected', false);
           // Notify the rest of the app that item was selected/deslected.
-          app.eventBus.trigger('selectionChange', place, false);
+          var reCenter = false;
+          app.eventBus.trigger('selectionChange', place, reCenter);
         }
       });
 
@@ -80,10 +83,10 @@ var app = app || {};
       // Enable all inputs in the menu. They will now be tabbable.
       this.$(':input').prop('disabled', false);
 
-      this.$closeButton.focus();
+      app.appView.requestFocus(this.$closeButton);
     },
 
-    hideMenu: function() {
+    hideMenu: function(resetFocus) {
       // Hide the menu.
       this.$el.toggleClass('filter-menu--visible');
       this.userOpenedMenu = false;
@@ -92,7 +95,8 @@ var app = app || {};
       this.$(':input').prop('disabled', true);
 
       // Notify the main app that the menu closed.
-      app.eventBus.trigger('menuHide', this);
+      app.eventBus.trigger('menuHide', resetFocus);
+
     },
 
     filterPlaces: function(event) {
@@ -118,8 +122,14 @@ var app = app || {};
       })
 
       if (this.userOpenedMenu && place.get('selected')) {
-        this.hideMenu();
+        var handBackFocus = false;
+        this.hideMenu(handBackFocus);
       }
+    },
+
+    closeButtonClickHandler: function(event) {
+      var handBackFocus = true;
+      this.hideMenu(handBackFocus);
     }
 
   });

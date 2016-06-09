@@ -34,16 +34,15 @@ var app = app || {};
     },
 
     showMenu: function() {
-      this.lastFocusEl = document.activeElement;
       this.filterMenuView.showMenu();
       this.$appArea.attr('aria-hidden', true);
 
       console.log('show menu');
     },
 
-    menuHideHandler: function() {
+    menuHideHandler: function(handBackFocus) {
       this.$appArea.attr('aria-hidden', false);
-      this.lastFocusEl.focus();
+      if (handBackFocus) this.handBackFocus();
 
       console.log('hide menu');
     },
@@ -69,6 +68,19 @@ var app = app || {};
 
       // Parse all models at once.
       app.places.add(data);
+    },
+
+    requestFocus: function(newTarget) {
+      if (newTarget) {
+        this.lastFocusEl = document.activeElement;
+        newTarget.focus();
+      } else {
+        console.warn('Focus was requested but no element was given');
+      }
+    },
+
+    handBackFocus: function() {
+      this.lastFocusEl.focus();
     }
 
   });
