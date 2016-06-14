@@ -263,6 +263,7 @@ body {
 
 .info-window-content__heading {
   font-weight: bold;
+  margin: 0;
 }
 
 .info-window-content__status {
