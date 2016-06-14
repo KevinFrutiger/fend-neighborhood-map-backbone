@@ -10,20 +10,27 @@ body {
 }
 
 .app-area {
+  display: -webkit-flex; /* Safari 8 */
   display: flex;
+  -webkit-flex-direction: column; /* Safari 8 */
   flex-direction: column;
   height: 100%;
   width: 100%;
 }
 
 .header {
+  -webkit-align-items: center; /* Safari 8 */
   align-items: center;
   background: #634d76;
   color: #fff;
+  display: -webkit-flex; /* Safari 8 */
   display: flex;
+  -webkit-flex-direction: row-reverse; /* Safari 8 */
   flex-direction: row-reverse;
+  -webkit-flex-shrink: 0; /* Safari 8 */
   flex-shrink: 0;
   height: 58px;
+  -webkit-justify-content: center; /* Safari 8 */
   justify-content: center;
   position: relative;
   width: 100%;
@@ -87,12 +94,15 @@ body {
 
 .main {
   background-color: #00ff00;
+  display: -webkit-flex; /* Safari 8 */
   display: flex;
+  -webkit-flex-grow: 1; /* Safari 8 */
   flex-grow: 1;
 }
 
 .map {
   background-color: blue;
+  -webkit-flex-grow: 1; /* Safari 8 */
   flex-grow: 1;
 }
 
@@ -129,37 +139,46 @@ body {
 }
 
 .filter-menu__container {
-  background: #634d76;
+  background: #775a8e;
+  display: -webkit-flex; /* Safari 8 */
   display: flex;
+  -webkit-flex-direction: column; /* Safari 8 */
   flex-direction: column;
   height: 100%;
   left: 0;
   position: absolute;
   top: 0;
+  -webkit-transform: translateX(-102%); /* Safari 8 */
   transform: translateX(-102%);
   width: 50%;
   will-change: transform;
 }
 
 .filter-menu--visible .filter-menu__container {
+  -webkit-transform: none; /* Safari 8 */
   transform: none;
 }
 
 /* Transition close */
 .fitler-menu--visible.filter-menu--animatable .filter-menu__container {
+  -webkit-transition: -webkit-transform 0.13s cubic-bezier(0, 0, 0.3, 1); /* Safari 8 */
   transition: transform 0.13s cubic-bezier(0, 0, 0.3, 1);
 }
 
 /* Transition open */
 .filter-menu--animatable .filter-menu__container {
+  -webkit-transition: -webkit-transform 0.33s cubic-bezier(0, 0, 0.3, 1); /* Safari 8 */
   transition: transform 0.33s cubic-bezier(0, 0, 0.3, 1);
 }
 
 
 .filter-menu__header {
+  -webkit-align-items: flex-end; /* Safari 8 */
   align-items: flex-end;
+  display: -webkit-flex; /* Safari 8 */
   display: flex;
   height: 120px;
+  -webkit-justify-content: center; /* Safari 8 */
   justify-content: center;
 }
 
@@ -200,7 +219,7 @@ body {
   content: '';
   display: block;
   height: 3px;
-  -webkit-transform: translateY(-6px) rotate(45deg);
+  -webkit-transform: translateY(-6px) rotate(45deg); /* Safari 8 */
   transform: translateY(-6px) rotate(45deg);
   -webkit-transform-origin: 10px 5px; /* Safari 8 */
   transform-origin: 10px 5px;
@@ -226,6 +245,7 @@ body {
 }
 
 .filter-menu__content {
+  -webkit-flex-grow: 1; /* Safari 8 */
   flex-grow: 1;
   list-style: none;
   margin: 0;
