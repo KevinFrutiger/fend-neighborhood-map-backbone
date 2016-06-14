@@ -36,6 +36,7 @@ body {
 }
 
 .header__menu-open {
+  cursor: pointer;
   width: 48px;
   height: 48px;
   margin: 0;
@@ -172,6 +173,7 @@ body {
 }
 
 .filter-menu__menu-close {
+  cursor: pointer;
   position: absolute;
   left: 4px;
   top: 4px;
@@ -245,6 +247,7 @@ body {
 }
 
 .filter-menu__item button {
+  cursor: pointer;
   background: 0;
   border: 0;
   color: #fff;
