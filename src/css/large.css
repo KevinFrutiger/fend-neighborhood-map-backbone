@@ -1,51 +1,51 @@
 html {
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 
 body {
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 
 .app-area {
   display: flex;
   flex-direction: column;
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 
 .header {
-  display: flex;
-  flex-direction: row-reverse;
   align-items: center;
-  flex-shrink: 0;
-  justify-content: center;
-  width: 100%;
   background: #634d76;
   color: #fff;
-  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  flex-shrink: 0;
+  justify-content: center;
   padding: 10px;
+  position: relative;
+  width: 100%;
 }
 
 .header__h1 {
-  padding: 0;
-  margin: 0;
   font-size: 1.125rem;
+  margin: 0;
+  padding: 0;
 }
 
 .header__menu-open {
+  background: none;
+  border: none;
   cursor: pointer;
-  width: 48px;
+  display: none;
   height: 48px;
+  left: 5px;
   margin: 0;
   padding: 0;
-  border: none;
-  background: none;
   position: absolute;
   top: 5px;
-  left: 5px;
-  display: none;
+  width: 48px;
 }
 
 .main {
@@ -60,34 +60,34 @@ body {
 }
 
 .filter-menu {
-  position: fixed;
-  width: 215px;
-  top: 0;
   left: 0;
   overflow: hidden;
   padding: 10px 20px 20px 10px;
+  position: fixed;
+  top: 0;
+  width: 215px;
 }
 
 .filter-menu__container {
   background: #634d76;
-  display: flex;
-  flex-direction: column;
   border-radius: 10px;
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
 }
 
 .filter-menu__header {
+  align-items: flex-end;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
   padding: 10px 10px 0;
 }
 
 .filer-menu_heading {
+  color: #fff;
+  font-size: 1.125rem;
   margin: 0;
   padding: 0;
-  font-size: 1.125rem;
-  color: #fff;
 }
 
 .filter-menu__menu-close {
@@ -118,18 +118,18 @@ body {
 }
 
 .filter-menu__item button {
-  cursor: pointer;
   background: 0;
   border: 0;
   color: #fff;
+  cursor: pointer;
   padding: 10px 5px;
-  width: 100%;
   text-align: left;
+  width: 100%;
 }
 
 .info-window-content {
-  overflow: auto;
   max-width: 300px;
+  overflow: auto;
   padding: 10px;
   width: 50vw;
 }
