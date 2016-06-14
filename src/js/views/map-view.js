@@ -333,7 +333,7 @@ var app = app || {};
                     htmlString = '<blockquote ' +
                                  'class="info-window-content__snippet">' +
                                  'No additional information available.' +
-                                 '<blockquote>';
+                                 '</blockquote>';
                   }
 
                   // Add the content to the info window.
