@@ -32,7 +32,6 @@ body {
   justify-content: center;
   padding: 10px;
   position: relative;
-  width: 100%;
 }
 
 .header__h1 {
@@ -86,6 +85,7 @@ body {
   display: flex;
   -webkit-flex-direction: column; /* Safari 8 */
   flex-direction: column;
+  overflow: hidden;
 }
 
 .filter-menu__header {

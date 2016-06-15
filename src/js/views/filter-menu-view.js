@@ -12,10 +12,16 @@ var app = app || {};
 
     initialize: function() {
       this.userOpenedMenu = false;
+      this.forceFilter = false;
 
       this.$closeButton = this.$('.js-menu-hide');
       this.$datalist = this.$('.js-datalist');
       this.$list = this.$('.js-list');
+
+      // Clear out the filter input field if there's already a value there.
+      // Firefox retains input values after refresh.
+      var input = $('.js-filter-input');
+      if (input.val()) input.val('');
 
       var self = this;
 
@@ -40,6 +46,11 @@ var app = app || {};
 
     render: function() {
       console.log('rendered filter menu');
+
+      // if (this.forceFilter) {
+
+      //   return;
+      // }
 
       var filteredModels = app.places.models.filter(function(place) {
         return place.get('filtered');
@@ -100,6 +111,7 @@ var app = app || {};
     },
 
     filterPlaces: function(event) {
+      console.log('filterPlaces fired');
 
       var inputValue = event.target.value;
 

@@ -49,13 +49,13 @@ var app = app || {};
 
     getData:function() {
       var data = [
-        {name: 'Trader Joe\'s'},
+        {name: 'Trader Joe’s'},
         {name: 'Starbucks'},
         {name: 'South San Francisco BART Station'},
-        {name: 'See\'s Candies'},
+        {name: 'See’s Candies'},
         {name: 'Best Buy'},
         {name: 'Paris Baguette'},
-        {name: 'Lidia\'s Deli'},
+        {name: 'Lidia’s Deli'},
         {name: 'San Bruno Mountain State Park'}
       ];
 
