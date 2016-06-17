@@ -1,6 +1,7 @@
 var app = app || {};
 
 app.ENTER_KEY = 13;
+app.TAB_KEY = 9;
 app.BREAKPOINT = 800;
 
 $(function() {

@@ -7,12 +7,15 @@ var app = app || {};
 
     events: {
       'click .js-menu-hide': 'closeButtonClickHandler',
-      'input .js-filter-input': 'filterPlaces'
+      'input .js-filter-input': 'filterPlaces',
+      'keydown .js-filter-input': 'filterInputKeydownHandler'
     },
 
     initialize: function() {
       this.userOpenedMenu = false;
       this.forceFilter = false;
+      // Whether Tab key is in Keydown when Input event fires.
+      this.inputIsTabKey = false;
 
       this.$closeButton = this.$('.js-menu-hide');
       this.$datalist = this.$('.js-datalist');
@@ -20,8 +23,8 @@ var app = app || {};
 
       // Clear out the filter input field if there's already a value there.
       // Firefox retains input values after refresh.
-      var input = $('.js-filter-input');
-      if (input.val()) input.val('');
+      //var input = $('.js-filter-input');
+      //if (input.val()) input.val('');
 
       var self = this;
 
@@ -46,11 +49,6 @@ var app = app || {};
 
     render: function() {
       console.log('rendered filter menu');
-
-      // if (this.forceFilter) {
-
-      //   return;
-      // }
 
       var filteredModels = app.places.models.filter(function(place) {
         return place.get('filtered');
@@ -111,7 +109,14 @@ var app = app || {};
     },
 
     filterPlaces: function(event) {
-      console.log('filterPlaces fired');
+      console.log('filterPlaces fired', event);
+
+      // Bail early if the input was the Tab key. IE (and only IE) fires input
+      // event for Tab key, but also tries to tab to next control.
+      if (this.inputIsTabKey) {
+        this.inputIsTabKey = false;
+        return;
+      }
 
       var inputValue = event.target.value;
 
@@ -142,6 +147,12 @@ var app = app || {};
     closeButtonClickHandler: function(event) {
       var handBackFocus = true;
       this.hideMenu(handBackFocus);
+    },
+
+    filterInputKeydownHandler: function(event) {
+      this.inputIsTabKey = (event.code === "Tab" || // Firefox
+                            event.key === "Tab" || // Chrome, Edge, IE11
+                            event.keyCode === app.TAB_KEY); // Safari 8, 9
     }
 
   });
