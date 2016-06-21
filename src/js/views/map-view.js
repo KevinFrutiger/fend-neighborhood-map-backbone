@@ -321,7 +321,9 @@ var app = app || {};
                     var snippet = data[2][0];
                     var url = data[3][0];
 
-                    var citation = '<a href="' + url + '" target="_blank">' +
+                    var citation = '<a href="' + url + '" target="_blank"' +
+                                   ' aria-label="Wikipedia article for ' +
+                                   place.get('name') + '">' +
                                    'Wikipedia</a>';
 
                     htmlString = '<blockquote ' +

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Neighborhood Map Project</title>
@@ -14,7 +14,7 @@
   <div class="app-area">
     <header role="banner" class="header">
       <h1 class="header__h1">Some Places</h1>
-      <button class="js-menu-show header__menu-open"><span></span></button>
+      <button class="js-menu-show header__menu-open" aria-label="Open filter menu"><span></span></button>
     </header>
 
     <main role="main" class="main">
@@ -26,9 +26,9 @@
     <div class="filter-menu__container">
       <header class="filter-menu__header">
         <h2 id="menu-heading" class="filer-menu_heading">Filter</h2>
-        <button class="js-menu-hide filter-menu__menu-close" disabled><span></span></button>
+        <button class="js-menu-hide filter-menu__menu-close" aria-label="Close fiter menu" disabled><span></span></button>
       </header>
-      <input id="place" name="place" class="js-filter-input filter-menu__input" placeholder="Enter text to filter" disabled>
+      <input id="place" name="place" class="js-filter-input filter-menu__input" placeholder="Enter text to filter" aria-label="Filter" disabled>
       <ul class="js-list filter-menu__content"></ul>
     </div>
   </div>
