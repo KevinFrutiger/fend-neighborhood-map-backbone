@@ -2,15 +2,20 @@ var app = app || {};
 
 (function() {
 
+  /**
+   * Creates a view for the Google Map.
+   */
   app.MapView = Backbone.View.extend({
 
     el: '.js-map',
 
+    // Defines image paths for each marker state.
     markerIcons: {
       NORMAL: 'images/marker-red.png',
       SELECTED: 'images/marker-yellow.png'
     },
 
+    // How long the marker should animate (ms).
     markerAnimationTimeoutDuration: 3000,
 
     initialize: function() {
@@ -21,7 +26,7 @@ var app = app || {};
 
       // After markers are added, map bounds are reset which changes
       // the zoom. Since we are required to designate a zoom here,
-      // we're setting to a wider zoom before map redraws to give sense
+      // we're setting to a wider zoom before map redraws to give a sense
       // of overall location and so the change in zoom doesn't look
       // like a glitch.
       //
@@ -45,11 +50,12 @@ var app = app || {};
 
       this.placesService = new google.maps.places.PlacesService(this.map);
 
-      // Backbone events
+      // Listen for filtering of the collection
       this.listenTo(app.places, 'change:filtered', this.render);
-      this.listenTo(app.eventBus, 'selectionChange', this.selectionChangeHandler);
+      // Listen for changes to the selection
+      this.listenTo(app.eventBus, 'selectionChange',
+                    this.selectionChangeHandler);
 
-      // Other DOM events
       $(window).resize({view: this},
                        this.windowResizeHandler);
 
@@ -59,11 +65,13 @@ var app = app || {};
     },
 
     render: function() {
-      console.log('map view render');
+      //console.log('map view render');
 
       var self = this;
 
+      // Get Google Places data and store it for each model.
       app.places.models.forEach(function(place) {
+          // If we haven't already gotten info for this place.
           if (!place.get('placeId')) {
             // Set up the request object for the Places Service.
             var request = {
@@ -85,7 +93,7 @@ var app = app || {};
               }
             });
 
-          } else { // We have a marker for this place already.
+          } else { // We have info and a marker for this place already.
             var marker = place.get('marker');
 
             // Show/hide based on whether place is in the filtered list.
@@ -98,12 +106,18 @@ var app = app || {};
           }
         });
 
-      // Remove the info window, if open
+      // Remove the info window, if open.
       if (this.infoWindow) {
         this.removeInfoWindow();
       }
     },
 
+    /**
+     * Handles changes to which model is selected.
+     * @param {Place} place - The model that was selected.
+     * @param {boolean} shouldPan - Whether the map should pan to the selected
+     *     marker.
+     */
     selectionChangeHandler: function(place, shouldPan) {
       if (place.get('selected')) {
         // Re-center the map to the corresponding place.
@@ -133,21 +147,33 @@ var app = app || {};
       }
     },
 
+    /**
+     * Handles onresize of window.
+     * @param {jQuery.Event} event - Window resize event
+     */
     windowResizeHandler: function(event) {
+      // Tell Google Map that the window resized.
       google.maps.event.trigger(event.data.view.map, 'resize');
 
       // Refit the map to include all the markers.
       event.data.view.refitAndCenter();
     },
 
+    /**
+     * Refits the map to include all the markers and re-centers.
+     */
     refitAndCenter: function() {
       this.map.fitBounds(this.mapBounds);
       this.map.setCenter(this.mapBounds.getCenter());
     },
 
+    /**
+     * Adds a marker to the map.
+     * @param {Place} place - A place model.
+     */
     addMarker: function(place) {
 
-      // Add the marker to the map. Instantiation automatically shows it.
+      // Add the marker to the map. Instantiating automatically displays it.
       var marker = new google.maps.Marker({
         map: this.map,
         place: {
@@ -174,6 +200,10 @@ var app = app || {};
       place.set('marker', marker);
     },
 
+    /**
+     * Animates a marker and stops animation for all others.
+     * @param {google.maps.Marker} markerToAnimate - The marker to animate.
+     */
     toggleMarkerAnimation: function(markerToAnimate) {
 
       // Animate the selected marker.
@@ -200,6 +230,12 @@ var app = app || {};
 
     },
 
+    /**
+     * Changes the visual state of a marker its selected state and resets
+     * all others.
+     * @param {google.maps.Marker} markerToToggle - The marker to toggle to
+     *     selected state.
+     */
     toggleMarkerSelectedState: function(markerToToggle) {
       // Toggle the selected marker to selected state.
       if (markerToToggle) {
@@ -208,7 +244,7 @@ var app = app || {};
 
       var self = this;
 
-      // Toggle all the other markers off.
+      // Toggle all the other markers to normal state.
       app.places.models.forEach(function(place) {
           var marker = place.get('marker');
 
@@ -218,6 +254,9 @@ var app = app || {};
         });
     },
 
+    /**
+     * Adds the info window the map and displays it.
+     */
     addInfoWindow: function(place) {
       // If the info window is already opened, remove it.
       if (this.infoWindow) {
@@ -276,12 +315,19 @@ var app = app || {};
 
     },
 
+    /**
+     * Removes the info window from the map and cleans up.
+     */
     removeInfoWindow: function() {
       // Clean up and close the window.
       google.maps.event.clearListeners(this.infoWindow, 'closeclick');
       this.infoWindow.close();
     },
 
+    /**
+     * Gets the content for the info window.
+     * @param {Place} place - The place to use to populate the info window.
+     */
     populateInfoWindow: function(place) {
 
       // If we already have Wikipedia data...
@@ -364,12 +410,16 @@ var app = app || {};
       }
     },
 
+    /**
+     * Adds the info to the info window.
+     * @param {string} htmlString - HTML to add to the info window content.
+     */
     appendInfo: function(htmlString) {
       // Get the DOM nodes that were used to set the content.
       //
-      // The info window UI is too slow to resize if we modify the node
-      // directly (text overflows). Thus, we're cloning the node so we can make
-      // changes and use use setContent() to update the info window.
+      // The info window UI resizes to slowly if we modify the node
+      // directly (text overflows briefly). Thus, we're cloning the node so
+      // we can make changes and use use setContent() to update the info window.
       //
       var infoElement = this.infoWindow.getContent().cloneNode(true);
 
@@ -389,6 +439,11 @@ var app = app || {};
 
     },
 
+    /**
+     * Creates the callback for the setTimeout that stops the
+     * marker animation.
+     * @param {google.maps.Marker} currentMarker - The marker to stop.
+     */
     createAnimationTimeoutHandler: function(currentMarker) {
       return function() {
         currentMarker.setAnimation(null);
