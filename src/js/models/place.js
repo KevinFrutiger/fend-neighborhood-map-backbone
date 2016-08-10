@@ -4,7 +4,7 @@ var app = app || {};
   'use strict';
 
   /**
-   * Creates a place model to hold data for a place.
+   * Creates a model to hold data for a place.
    */
   app.Place = Backbone.Model.extend({
 
