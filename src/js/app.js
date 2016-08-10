@@ -20,7 +20,7 @@ $(function() {
   };
 
   // Start the app.
-  console.log('starting the app');
+  //console.log('starting the app');
   app.appView = new app.AppView();
 
 });

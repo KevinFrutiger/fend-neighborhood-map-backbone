@@ -14,22 +14,20 @@ var app = app || {};
     },
 
     initialize: function() {
-      console.log('appView initialized');
+      //console.log('appView initialized', app.places);
 
       this.filterMenuView = new app.FilterMenuView();
       this.mapView = null;
       this.$appArea = $('.app-area');
       this.lastFocusEl = null;
 
-
       this.listenTo(app.eventBus, 'menuHide', this.menuHideHandler);
-
-      this.getData();
 
     },
 
     render: function() {
       //console.log('render appView');
+      // nothing.
     },
 
     /**
@@ -65,38 +63,6 @@ var app = app || {};
       if (shouldHandBackFocus) this.handBackFocus();
 
       //console.log('hide menu');
-    },
-
-    /**
-     * Retrieves the places data.
-     */
-    getData:function() {
-      // For purposes of this demo app, hard-coding data.
-      // TODO: Load and process this data in the collection.
-      var data = [
-        {name: 'Trader Joe’s'},
-        {name: 'Starbucks'},
-        {name: 'South San Francisco BART Station'},
-        {name: 'See’s Candies'},
-        {name: 'Best Buy'},
-        {name: 'Paris Baguette'},
-        {name: 'Lidia’s Deli'},
-        {name: 'San Bruno Mountain State Park'}
-      ];
-
-      this.buildCollection(data);
-    },
-
-    /**
-     * Adds data to the Places collection.
-     * @param {Array.<Object>} data - Array of objects to parse into collection.
-     */
-    buildCollection: function(data) {
-      // Sort places by name.
-      app.places.comparator = 'name';
-
-      // Parse all models at once.
-      app.places.add(data);
     },
 
     /**

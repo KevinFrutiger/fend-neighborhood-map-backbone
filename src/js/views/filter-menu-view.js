@@ -41,18 +41,17 @@ var app = app || {};
 
         });
 
-      // Update the UI when the collection is done updating since we're sorting
-      // the collection.
-      this.listenTo(app.places, 'update', this.render);
       // Listen for any changes to which item is selected
       // (via map marker, this menu, etc)
       this.listenTo(app.eventBus,
                     'selectionChange',
                     this.selectionChangeHandler);
+
+      this.render();
     },
 
     render: function() {
-      console.log('rendered filter menu');
+      //console.log('rendered filter menu');
 
       // Get the filtered models only.
       var filteredModels = app.places.models.filter(function(place) {

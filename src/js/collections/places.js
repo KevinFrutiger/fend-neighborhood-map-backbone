@@ -8,7 +8,9 @@ var app = app || {};
    */
   var Places = Backbone.Collection.extend({
 
-    model: app.Place
+    model: app.Place,
+
+    comparator: 'name'
 
   });
 
