@@ -6,11 +6,13 @@ module.exports = function(grunt) {
 
     clean: {
       build: {
-        src: ['deploy/*']
+        files: [{
+          src: ['dist/*'],
+          dot: true
+        }]
       },
-      inlinedcss: { // Used to clean out stylesheets that are now in <style>
-        src: ['deploy/css/style-small.css']
-      }
+      // Used to clean out stylesheets that are now in <style>
+      inlinedcss: ['dist/css/small.css', 'dist/css/normalize.css']
     },
 
     htmlmin: {
@@ -26,7 +28,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src/',
           src: ['*.html'],
-          dest: 'deploy/'
+          dest: 'dist/'
         }]
       }
     },
@@ -37,7 +39,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src/css',
           src: ['*.css'],
-          dest: 'deploy/css/'
+          dest: 'dist/css/'
         }]
       }
     },
@@ -46,17 +48,22 @@ module.exports = function(grunt) {
       dist: {
         options: {
           patterns: [{
-            match: /<link rel=\"stylesheet\" href=\"css\/style-small.css\" media=\"screen and \(max-width: 800px\)\">/g,
-            replacement: '<style>@media screen and (max-width: 800px) {' +
-                         '<%= grunt.file.read("deploy/css/style-small.css") %>' +
+            match: /<link rel=\"stylesheet\" href=\"css\/small.css" media=\"screen and \(max-width:800px\)\">/g,
+            replacement: '<style>/*! small.css */@media screen and (max-width: 800px) {' +
+                         '<%= grunt.file.read("dist/css/small.css") %>' +
                          '}</style>'
+          },{
+            match: /<link rel=\"stylesheet\" href=\"css\/normalize.css\">/g,
+            replacement: '<style>' +
+                         '<%= grunt.file.read("dist/css/normalize.css") %>' +
+                         '</style>'
           }]
         },
         files: [{
           expand: true,
-          cwd: 'deploy/',
+          cwd: 'dist/',
           src: ['index.html'],
-          dest: 'deploy/'
+          dest: 'dist/'
         }]
       }
     },
@@ -67,7 +74,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src/images/',
           src: ['**/*.{png,jpg,gif,svg}'],
-          dest: 'deploy/images/'
+          dest: 'dist/images/'
         }]
       }
     },
@@ -86,7 +93,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src/js',
           src: ['**/*.js'],
-          dest: 'deploy/js/'
+          dest: 'dist/js/'
         }]
       }
     },
@@ -97,7 +104,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: 'src/',
           src: ['*.htaccess'],
-          dest: 'deploy/',
+          dest: 'dist/',
           dot: true
         }]
       }
@@ -107,13 +114,13 @@ module.exports = function(grunt) {
     // Testing
 
     jshint: {
-      main: ['src/js/*.js']
+      main: ['src/js/**/*.js', '!src/js/lib/**']
     },
 
     pagespeed: {
       options: {
         nokey: true,
-        url: "https://kevinfrutiger.github.io/frontend-nanodegree-neighborhood-map/",
+        url: "https://kevinfrutiger.github.io/fend-neighborhood-map-backbone/",
         locale: "en_US",
         threshold: 90
       },
