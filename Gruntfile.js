@@ -57,6 +57,15 @@ module.exports = function(grunt) {
             replacement: '<style>' +
                          '<%= grunt.file.read("dist/css/normalize.css") %>' +
                          '</style>'
+          },{
+            match: /js\/lib\/jquery-(\d+\.\d+\.\d+).min.js/g,
+            replacement: '//code.jquery.com/jquery-$1.min.js'
+          },{
+            match: /js\/lib\/underscore-(\d+\.\d+\.\d+).min.js/g,
+            replacement: '//cdnjs.cloudflare.com/ajax/libs/underscore.js/$1/underscore-min.js'
+          },{
+            match: /js\/lib\/backbone-(\d+\.\d+\.\d+).min.js/g,
+            replacement: '//cdnjs.cloudflare.com/ajax/libs/backbone.js/$1/backbone-min.js'
           }]
         },
         files: [{
