@@ -1,0 +1,1 @@
+var app=app||{};(function(){"use strict";var Places=Backbone.Collection.extend({model:app.Place,comparator:"name"});app.places=new Places})();
