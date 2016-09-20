@@ -12,7 +12,8 @@ module.exports = function(grunt) {
         }]
       },
       // Used to clean out stylesheets that are now in <style>
-      inlinedcss: ['dist/css/small.css', 'dist/css/normalize.css']
+      inlinedcss: ['dist/css/small.css', 'dist/css/normalize.css'],
+      concatenatedjs: ['dist/js/app.js', 'dist/js/collections/', 'dist/js/models/', 'dist/js/views/']
     },
 
     htmlmin: {
@@ -44,6 +45,20 @@ module.exports = function(grunt) {
       }
     },
 
+    concat: {
+      dist: {
+        src: ['src/js/models/place.js',
+              'src/js/collections/places.js',
+              'src/js/views/filter-item-view.js',
+              'src/js/views/filter-menu-view.js',
+              'src/js/views/map-view.js',
+              'src/js/views/app-view.js',
+              'src/js/app.js'],
+        dest: 'dist/js/app-concat.js'
+      }
+
+    },
+
     replace: {
       dist: {
         options: {
@@ -66,6 +81,27 @@ module.exports = function(grunt) {
           },{
             match: /js\/lib\/backbone-(\d+\.\d+\.\d+).min.js/g,
             replacement: '//cdnjs.cloudflare.com/ajax/libs/backbone.js/$1/backbone-min.js'
+          },{
+            match: /<script src=\"js\/models\/place.js\"><\/script>/g,
+            replacement: ''
+          },{
+            match: /<script src=\"js\/collections\/places.js\"><\/script>/g,
+            replacement: ''
+          },{
+            match: /<script src=\"js\/views\/filter-item-view.js\"><\/script>/g,
+            replacement: ''
+          },{
+            match: /<script src=\"js\/views\/filter-menu-view.js\"><\/script>/g,
+            replacement: ''
+          },{
+            match: /<script src=\"js\/views\/map-view.js\"><\/script>/g,
+            replacement: ''
+          },{
+            match: /<script src=\"js\/views\/app-view.js\"><\/script>/g,
+            replacement: ''
+          },{
+            match: /<script src=\"js\/app.js\"><\/script>/g,
+            replacement: '<script src="js/app-concat.js"></script>'
           }]
         },
         files: [{
@@ -100,7 +136,7 @@ module.exports = function(grunt) {
       main: {
         files: [{
           expand: true,
-          cwd: 'src/js',
+          cwd: 'dist/js',
           src: ['**/*.js', '!lib/**'],
           dest: 'dist/js/'
         }]
@@ -147,6 +183,7 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
@@ -156,6 +193,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-pagespeed');
   grunt.loadNpmTasks('grunt-replace');
 
-  grunt.registerTask('build', ['jshint', 'clean:build', 'htmlmin', 'cssmin', 'imagemin', 'uglify', 'copy', 'replace', 'clean:inlinedcss']);
+  grunt.registerTask('build', ['jshint', 'clean:build', 'htmlmin', 'cssmin', 'imagemin', 'copy', 'concat', 'replace', 'clean:inlinedcss', 'uglify', 'clean:concatenatedjs']);
 
 };
