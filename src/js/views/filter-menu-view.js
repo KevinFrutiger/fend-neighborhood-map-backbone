@@ -54,7 +54,6 @@ var app = app || {};
 
       // Get the filtered models only.
       var filteredModels = app.places.models.filter(function(place) {
-        console.log('filter ', place.get('filtered'));
         return place.get('filtered');
       });
 
@@ -139,11 +138,15 @@ var app = app || {};
 
       var inputValue = event.target.value;
 
-      //console.log(re);
+      // Prepare string for RegEx matching of straight and curly quotes.
+      inputValue = inputValue.replace(/['’]/ig, '[\'’]');
+      inputValue = inputValue.replace(/["“”]/ig, '["“”]');
+
       var re = new RegExp(inputValue, 'ig');
 
       // Filter places to those whose names contain the input string.
       app.places.models.forEach(function(model) {
+        re.lastIndex = 0;
         model.set('filtered', re.test(model.get('name')));
       });
 
