@@ -11,16 +11,6 @@
   <link rel="stylesheet" href="css/large.css" media="screen and (min-width: 801px)">
 </head>
 <body class="js-app">
-  <div class="app-area">
-    <header role="banner" class="header">
-      <h1 class="header__h1">Some Places</h1>
-      <button class="js-menu-show header__menu-open" aria-label="Open filter menu"><span></span></button>
-    </header>
-
-    <main role="main" class="main">
-      <div class="js-map map"></div>
-    </main>
-  </div>
 
   <div class="js-filter-menu filter-menu filter-menu--animatable" role="dialog" aria-labelledby="menu-heading">
     <div class="filter-menu__container">
@@ -32,6 +22,18 @@
       <ul class="js-list filter-menu__content"></ul>
     </div>
   </div>
+
+  <div class="app-area">
+    <header role="banner" class="header">
+      <h1 class="header__h1">Some Places</h1>
+      <button class="js-menu-show header__menu-open" aria-label="Open filter menu"><span></span></button>
+    </header>
+
+    <main role="main" class="main">
+      <div class="js-map map"></div>
+    </main>
+  </div>
+
 
   <!-- Templates -->
   <script type="text/templates" class="js-filter-item">
