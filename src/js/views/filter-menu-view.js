@@ -51,10 +51,10 @@ var app = app || {};
     },
 
     render: function() {
-      //console.log('rendered filter menu');
 
       // Get the filtered models only.
       var filteredModels = app.places.models.filter(function(place) {
+        console.log('filter ', place.get('filtered'));
         return place.get('filtered');
       });
 
@@ -138,6 +138,8 @@ var app = app || {};
       }
 
       var inputValue = event.target.value;
+
+      //console.log(re);
       var re = new RegExp(inputValue, 'ig');
 
       // Filter places to those whose names contain the input string.

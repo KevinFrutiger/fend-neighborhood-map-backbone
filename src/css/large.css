@@ -86,7 +86,7 @@ body {
   display: flex;
   -webkit-flex-direction: column; /* Safari 8 */
   flex-direction: column;
-  overflow: hidden;
+  /*overflow: hidden;*/ /* Safari 10 loses focus outline on last list item if this is set to hidden */
 }
 
 .filter-menu__header {
